@@ -47,11 +47,11 @@ async function predictMove() {
     var disable_flag = false
 
     var rockimg = document.createElement('img')
-    rockimg.src = '../assets/rock.jpg'
+    rockimg.src = 'https://raw.githubusercontent.com/saivinayb/rps/master/assets/rock.jpg'
     var paperimg = document.createElement('img')
-    paperimg.src = '../assets/paper.jpg'
+    paperimg.src = 'https://raw.githubusercontent.com/saivinayb/rps/master/assets/paper.jpg'
     var scissorimg = document.createElement('img')
-    scissorimg.src = '../assets/scissor.jpg'
+    scissorimg.src = 'https://raw.githubusercontent.com/saivinayb/rps/master/assets/scissor.jpg'
 
     const model = await tf.loadLayersModel('https://raw.githubusercontent.com/saivinayb/rps/master/models/rps_tfjs_model/model.json')
 
