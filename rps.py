@@ -31,6 +31,6 @@ while True:
     cv2.putText(frame, "prediction: "+move, (25, 25), cv2.QT_FONT_NORMAL, 0.5, (255, 0, 0), 1, cv2.LINE_AA)
     frame[0:256, -256:] = rock if comp_move == 0 else paper if comp_move == 1 else scissor
     prev = move
-    cv2.imshow("frame", frame)
+    cv2.imshow("Rock Paper Scissors", frame)
 vid.release()
 cv2.destroyAllWindows()
