@@ -8,7 +8,7 @@ var ctx = canvas.getContext('2d')
 ctx.beginPath();
 ctx.lineWidth = "2";
 ctx.strokeStyle = "green";
-ctx.rect(0, 0, 256, 256);
+ctx.rect(40, 40, 256, 256);
 ctx.font = "18px Arial";
 ctx.fillStyle = "blue";
 
@@ -41,27 +41,29 @@ function choose(choices) {
 
 async function predictMove() {
     var move = ''
-    var classes = ['rock', 'paper', 'scissors']
+    var classes = ['rock', 'paper', 'scissors', 'lizard', 'spock', 'none']
     var prev = ''
     var comp_move = ''
     var disable_flag = false
 
-    var rockimg = document.createElement('img')
-    rockimg.src = 'https://raw.githubusercontent.com/saivinayb/rps/master/assets/rock.jpg'
-    var paperimg = document.createElement('img')
-    paperimg.src = 'https://raw.githubusercontent.com/saivinayb/rps/master/assets/paper.jpg'
-    var scissorimg = document.createElement('img')
-    scissorimg.src = 'https://raw.githubusercontent.com/saivinayb/rps/master/assets/scissor.jpg'
+    var rock = document.createElement('img')
+    rock.src = 'https://raw.githubusercontent.com/saivinayb/rps/master/assets/rock.png'
+    var paper = document.createElement('img')
+    paper.src = 'https://raw.githubusercontent.com/saivinayb/rps/master/assets/paper.png'
+    var scissor = document.createElement('img')
+    scissor.src = 'https://raw.githubusercontent.com/saivinayb/rps/master/assets/scissors.png'
+    var lizard = document.createElement('img')
+    lizard.src = 'https://raw.githubusercontent.com/saivinayb/rps/master/assets/lizard.png'
+    var spock = document.createElement('img')
+    spock.src = 'https://raw.githubusercontent.com/saivinayb/rps/master/assets/spock.png'
 
-    const model = await tf.loadLayersModel('https://raw.githubusercontent.com/saivinayb/rps/master/models/rps_tfjs_model/model.json')
+    const model = await tf.loadLayersModel('https://raw.githubusercontent.com/saivinayb/rps/master/models/rpsls_tfjs_model/model.json')
 
     const predict_loop = setInterval(function () {
         ctx.drawImage(video, 0, 0, 640, 480)
         ctx.stroke();
-        ctx.fillText("User's Move", 80, 280);
-        ctx.fillText("CPU's Move", 480, 280);
         var imgdata = tf.tidy(
-            () => tf.browser.fromPixels(video).slice([0, 0, 0], [256, 256, 3]).resizeBilinear([100, 100]).mean(2).div(tf.scalar(255)).expandDims(0).expandDims(-1)
+            () => tf.browser.fromPixels(video).slice([40, 40, 0], [296, 296, 3]).resizeBilinear([128, 128]).div(tf.scalar(255)).expandDims(0)
         )
         var pred = tf.tidy(
             () => model.predict(imgdata)
@@ -69,13 +71,17 @@ async function predictMove() {
         pred = pred.argMax(axis = 1).dataSync()[0]
         move = classes[pred]
         if (move != prev) {
-            comp_move = choose([0, 1, 2])
+            comp_move = choose([0, 1, 2, 3, 4])
+            if (pred == 5) comp_move = 5
         }
         prev = move;
-        ctx.fillText("prediction: " + move, 25, 25);
-        if (comp_move == 0) { ctx.drawImage(rockimg, 384, 0, 256, 256) }
-        if (comp_move == 1) { ctx.drawImage(paperimg, 384, 0, 256, 256) }
-        if (comp_move == 2) { ctx.drawImage(scissorimg, 384, 0, 256, 256) }
+        ctx.fillText("prediction: " + move, 85, 25);
+        ctx.fillText("CPU's move: " + classes[comp_move], 410, 25);
+        if (comp_move == 0) { ctx.drawImage(rock, 344, 40, 256, 256) }
+        if (comp_move == 1) { ctx.drawImage(paper, 344, 40, 256, 256) }
+        if (comp_move == 2) { ctx.drawImage(scissor, 344, 40, 256, 256) }
+        if (comp_move == 3) { ctx.drawImage(lizard, 344, 40, 256, 256) }
+        if (comp_move == 4) { ctx.drawImage(spock, 344, 40, 256, 256) }
         disableWebcamButton.addEventListener('click', function () {
             disable_flag = true
         })
