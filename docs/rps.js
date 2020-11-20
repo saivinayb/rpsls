@@ -4,9 +4,10 @@ const enableWebcamButton = document.getElementById('webcamButton');
 const disableWebcamButton = document.getElementById('webcamButtonOff');
 const canvas = document.getElementById('canvas')
 var ctx = canvas.getContext('2d')
+var ptag = document.getElementById('ptag')
 
 ctx.beginPath();
-ctx.lineWidth = "2";
+ctx.lineWidth = "3";
 ctx.strokeStyle = "green";
 ctx.rect(40, 40, 256, 256);
 ctx.font = "18px Arial";
@@ -53,7 +54,9 @@ async function predictMove() {
     var scissor = document.createElement('img')
     scissor.src = 'https://raw.githubusercontent.com/saivinayb/rps/master/assets/scissors.png'
 
-    const model = await tf.loadLayersModel('https://raw.githubusercontent.com/saivinayb/rps/master/models/rps_tfjs_model/model.json')
+	ptag.innerHTML = "Please wait for the model to load. It happens only the first time"
+	const model = await tf.loadLayersModel('https://raw.githubusercontent.com/saivinayb/rps/master/models/rps_tfjs_model/model.json')
+	ptag.innerHTML = 'Postion your gesture at the center of the screen over a plain background'
 
     const predict_loop = setInterval(function () {
         ctx.drawImage(video, 0, 0, 640, 480)
@@ -75,7 +78,8 @@ async function predictMove() {
         if (comp_move == 0) { ctx.drawImage(rock, 344, 40, 256, 256) }
         if (comp_move == 1) { ctx.drawImage(paper, 344, 40, 256, 256) }
         if (comp_move == 2) { ctx.drawImage(scissor, 344, 40, 256, 256) }
-        disableWebcamButton.addEventListener('click', function () {
+		disableWebcamButton.addEventListener('click', function () {
+			ptag.innerHTML = ""
             disable_flag = true
         })
         if (disable_flag) {
