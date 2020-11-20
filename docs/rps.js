@@ -88,6 +88,6 @@ async function predictMove() {
             stream = video.srcObject;
             stream.getTracks().forEach(track => track.stop())
         }
-    }, 35)
+    }, 25)
 }
 
